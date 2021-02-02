@@ -1,0 +1,56 @@
+Exercice 1 : création d'une procédure stockée sans paramètre
+
+---Créez la procédure stockée Lst_Suppliers correspondant à la requête afficher le nom des fournisseurs pour lesquels une commande a été passée.
+
+DELIMITER |
+
+CREATE PROCEDURE Lst_Suppliers ()
+BEGIN
+    SELECT DISTINCT sup_name
+    FROM suppliers,products,orders_details
+    WHERE sup_name IS NOT NULL AND sup_id=pro_sup_id AND ode_pro_id=pro_id;
+END |
+
+DELIMITER ;
+
+----Exécutez la commande SQL suivante pour obtenir des informations sur cette procédure stockée :
+
+SHOW CREATE PROCEDURE Lst_Suppliers
+Lst_Suppliers		CREATE DEFINER=`root`@`localhost` PROCEDURE `Lst_S...	utf8mb4	utf8mb4_unicode_ci	utf8mb4_0900_ai_ci	
+
+
+
+Exercice 2 : création d'une procédure stockée avec un paramètre en entrée
+
+
+
+DELIMITER |
+
+CREATE PROCEDURE Lst_Rush_Orders(IN p_ord_status VARCHAR(50))
+
+BEGIN
+   SELECT ord_id,ord_order_date,ord_payment_date 
+   FROM orders
+   WHERE ord_status = p_ord_status;
+END |
+
+DELIMITER ;
+
+
+Exercice 3 : création d'une procédure stockée avec plusieurs paramètres
+
+
+DELIMITER |
+CREATE PROCEDURE Supplier(
+    p_sup_id VARCHAR(50), 
+    p_year INT(10)
+)
+
+BEGIN
+
+SELECT SUM((ode_unit_price*ode_quantity)-ode_discount) 
+FROM orders_details,suppliers,orders,products
+WHERE sup_id=p_sup_id AND p_year=YEAR(ord_payment_date) AND sup_id=pro_sup_id AND ode_pro_id=pro_id AND ord_id=ode_ord_id;
+END |
+
+DELIMITER ;

@@ -1,0 +1,64 @@
+Exercice 1 : base hotel
+
+1.Afficher la liste des hôtels avec leur station.
+
+
+CREATE VIEW HotelStation
+AS
+SELECT hot_nom,sta_nom
+FROM hotel,station
+WHERE hot_sta_id=sta_id
+
+
+2.Afficher la liste des chambres et leur hôtel
+
+
+CREATE VIEW HotelChambre
+AS
+SELECT cha_id,hot_nom
+FROM hotel,chambre
+WHERE cha_hot_id=hot_id
+
+3.Afficher la liste des réservations avec le nom des clients
+
+CREATE VIEW ReservationClient
+AS
+SELECT res_id,cli_nom
+FROM reservation,client
+WHERE res_cli_id=cli_id
+
+4.Afficher la liste des chambres avec le nom de l'hôtel et le nom de la station
+
+CREATE VIEW ChambresHotelStation
+AS
+SELECT cha_numero,hot_nom,sta_nom
+FROM chambre,hotel,station
+WHERE hot_sta_id=sta_id AND cha_hot_id=hot_id
+
+5.Afficher les réservations avec le nom du client et le nom de l'hôtel
+
+CREATE VIEW ReservationClientHotel
+AS
+SELECT res_id,cli_nom,hot_nom
+FROM reservation,hotel,client,chambre
+WHERE cli_id=res_cli_id AND res_cha_id=cha_id AND cha_hot_id=hot_id
+
+Exercice 2 : base gescom
+
+1.v_Details correspondant à la requête : _A partir de la table orders_details, afficher par code produit, 
+la somme des quantités commandées et le prix total correspondant : 
+on nommera la colonne correspondant à la somme des quantités commandées, QteTot et le prix total, PrixTot.
+
+CREATE VIEW v_Details
+AS
+SELECT SUM(ode_quantity) AS 'QteTot',SUM(pro_price) AS 'PrixTot'
+FROM products,orders_details
+WHERE ode_pro_id=pro_id
+
+2.v_Ventes_Zoom correspondant à la requête : Afficher les ventes dont le code produit est ZOOM (affichage de toutes les colonnes de la table orders_details).
+
+CREATE VIEW v_Ventes_Zoom
+AS
+SELECT pro_name,ode_id,ode_unit_price,ode_discount,ode_quantity,ode_ord_id,ode_pro_id
+FROM products,orders_details
+WHERE ode_pro_id=pro_id AND pro_name='Zoom'
